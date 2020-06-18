@@ -6,7 +6,6 @@
 #include <string>
 #include <TrocoSolverAbstract.h>
 
-
 class TrocoSolverDivConquer : public TrocoSolverAbstract {
 private:
     long recursivecalls;
@@ -14,8 +13,7 @@ private:
 public:
 
     virtual void solve(const std::vector<unsigned int> &denom,unsigned int value, std::vector<unsigned int> &coins); 
-
-    int TrocoRecursivo(const std::vector<unsigned int> &denom, int ultima, unsigned int value, std::vector<unsigned int> &coinsProv);
+    int DCMakeChange(const std::vector<unsigned int> &denom, unsigned int value, std::vector<unsigned int> &coins, std::vector<unsigned int> &ultima);
 
      /// how many recursive calls in the last run of solve()
     virtual long countRecursiveCalls() { return recursivecalls; }

@@ -1,50 +1,47 @@
 #include <TrocoSolver.h>
+#include <iostream>
 
-void TrocoSolverDivConquer::solve(const std::vector<unsigned int> &denom, unsigned int value, std::vector<unsigned int> &coins) {
-
-    coins.resize(denom.size(), 0);
-    recursivecalls = -1;
-    
-    int quant = TrocoRecursivo(denom, denom.size() - 1, value, coins);
-
-    if (quant >= 0) 
-        return;
-
-    // fills a dummy answer with 1 coin of each denomination    
-    coins.resize(denom.size(), 1);
-    
-} //solve
-
-int TrocoSolverDivConquer::TrocoRecursivo(const std::vector<unsigned int> &denom, int ultima, unsigned int value, std::vector<unsigned int> &coinsProvisoria){
-
-    std::vector<unsigned int> coins1(coinsProvisoria);
-    std::vector<unsigned int> coins2(coinsProvisoria);
-
-    int aux1 = -1;
-    int aux2 = -1;
+int TrocoSolverDivConquer::DCMakeChange(const std::vector<unsigned int> &denom, unsigned int value, std::vector<unsigned int> &coins, std::vector<unsigned int> &ultima) {
 
     recursivecalls++;
-
-    if (ultima < 0 or value < 0)
-        return -1;
 
     if (value == 0)
         return 0;
 
-    coins1[ultima]++;
+    int q = value; // Solução óbvia com somente moedas de 1 centavo
+    int aux;
 
-    if (value >= denom[ultima])
-        aux1 = TrocoSolverDivConquer::TrocoRecursivo(denom, ultima, value - denom[ultima], coins1);
+    for (int i = 0; i < denom.size(); i++) {
+        if (denom[i] > value)
+            continue; // Essa moeda não serve
 
-    aux2 = TrocoSolverDivConquer::TrocoRecursivo(denom, ultima - 1, value, coins2);
+        aux = q;
+        q = std::min (q, 1 + DCMakeChange(denom, value - denom[i], coins, ultima));
 
-    if ((aux1 < aux2 or aux2 == -1) and aux1 != -1) {
-        coinsProvisoria = coins1;
-        return aux1 + 1;
+        if (aux > q)
+            ultima[value] = i;
+
     }
-    else {
-        coinsProvisoria = coins2;
-        return aux2;
-    }
 
-} //TrocoRecursivo
+    return q; // Quantidade ótima de moedas para troco
+
+}
+
+void TrocoSolverDivConquer::solve(const std::vector<unsigned int> &denom, unsigned int value, std::vector<unsigned int> &coins) {
+
+    recursivecalls = 0;
+
+    std::vector<unsigned int> ultima;
+
+    coins.resize(denom.size(),0);
+    ultima.resize(value + 1, 0);
+    ultima[0] = 0;
+
+    DCMakeChange (denom, value, coins, ultima);
+
+    while (value > 0){
+        coins[ultima[value]]++;
+        value -= denom[ultima[value]];
+    }
+    
+} //solve
