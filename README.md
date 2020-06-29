@@ -1,3 +1,4 @@
 # Lab04-CES12
-Lab 04 - Moedas de Troco. CES-12 (Algoritmos e Estruturas de Dados II), 2020
-Nota: 100
+Lab 04 - Paradigmas de Programação (Moedas de Troco e SSP). CES-12 (Algoritmos e Estruturas de Dados II), 2020
+Nota - Moedas de Troco: 100
+Nota - SSP: 
